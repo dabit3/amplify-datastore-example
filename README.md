@@ -1,5 +1,8 @@
 ## Basic DataStore Example
 
+- [Creating a new Amplify app with DataStore](https://github.com/dabit3/amplify-datastore-example#creating-a-new-amplify-app-using-datastore)
+- [Adding DataStore to an existing AppSync API](https://github.com/dabit3/amplify-datastore-example#adding-datastore-to-an-existing-graphql-api)
+
 ### Creating a new Amplify app using DataStore
 
 The fastest way to get started is using the amplify-app npx script such as with Create React app:
