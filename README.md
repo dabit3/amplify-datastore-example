@@ -229,8 +229,7 @@ $ amplify update api
 ? Choose the default authorization type for the API API key
 ? Enter a description for the API key: test
 ? After how many days from now the API key should expire (1-365): <your expiration setting>
-? Do you want to configure advanced settings for the GraphQL API (Use arrow keys
-)
+? Do you want to configure advanced settings for the GraphQL API
   No, I am done.
 ❯ Yes, I want to make some additional changes.
 ? Configure additional auth types? N
