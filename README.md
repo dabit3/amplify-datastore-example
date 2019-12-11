@@ -1,5 +1,7 @@
 ## Basic DataStore Example
 
+To learn more about DataStore, check out [this talk](https://www.youtube.com/watch?v=KcYl6_We0EU) by Richard Threlkeld.
+
 - [Creating a new Amplify app with DataStore](https://github.com/dabit3/amplify-datastore-example#creating-a-new-amplify-app-using-datastore)
 - [Adding DataStore to an existing AppSync API](https://github.com/dabit3/amplify-datastore-example#adding-datastore-to-an-existing-graphql-api)
 
