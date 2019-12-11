@@ -13,7 +13,7 @@ $ cd amplify-datastore
 $ npx amplify-app@latest
 ```
 
-Once this completes open the GraphQL schema in the __amplify/backend/api/<datasourcename>/schema.graphql__. You can use the sample or the one below that will be used in this example:
+Once this completes open the GraphQL schema in the __amplify/backend/api/_datasourcename_/schema.graphql__. You can use the sample or the one below that will be used in this example:
 
 ```graphql
 enum PostStatus {
