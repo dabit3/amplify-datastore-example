@@ -99,6 +99,10 @@ const posts = await DataStore.query(Post, c => c.rating("gt", 4).status("eq", Po
 const posts = await DataStore.query(Post, c => c.title("contains", "First"));
 ```
 
+__Numbers__: `eq | ne | le | lt | ge | gt | between`
+
+__Lists__: `contains | notContains`
+
 ### Updating data
 
 Models in DataStore are immutable. To update a record you must use the .copyOf function to apply updates to the item’s fields rather than mutating the instance directly:
