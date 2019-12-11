@@ -1,68 +1,141 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Basic DataStore Example
 
-## Available Scripts
+The fastest way to get started is using the amplify-app npx script such as with Create React app:
 
-In the project directory, you can run:
+```sh
+$ npx create-react-app amplify-datastore --use-npm
+$ cd amplify-datastore
+$ npx amplify-app@latest
+```
 
-### `npm start`
+Once this completes open the GraphQL schema in the __amplify/backend/api/<datasourcename>/schema.graphql__. You can use the sample or the one below that will be used in this example:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```graphql
+enum PostStatus {
+  ACTIVE
+  INACTIVE
+}
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+type Post @model {
+  id: ID!
+  title: String!
+  rating: Int!
+  status: PostStatus!
+}
+```
 
-### `npm test`
+Next, we'll run the model code generation from the GraphQL Schema:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```sh
+$ npm run amplify-modelgen
+```
 
-### `npm run build`
+Next, we'll install the dependencies:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+$ npm i @aws-amplify/core @aws-amplify/datastore
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Then, import the necessary dependencies in __src/App.js__:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+import { DataStore, Predicates } from "@aws-amplify/datastore";
+import { Post, PostStatus } from "./models";
+```
 
-### `npm run eject`
+Now, let's look at the different types of operations.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Saving data
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+await DataStore.save(
+  new Post({
+    title: `My First Post`,
+    rating: 10,
+    status: PostStatus.ACTIVE
+  })
+);
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Querying data
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Query all data:
 
-## Learn More
+```js
+const posts = await DataStore.query(Post);
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Passing in a limit:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```js
+const posts = await DataStore.query(Post, null, {
+  page: 0,
+  limit: 100
+});
+```
 
-### Code Splitting
+Query with a predicate.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Available predicates:
 
-### Analyzing the Bundle Size
+__Strings__: `eq | ne | le | lt | ge | gt | contains | notContains | beginsWith | between`
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```js
+// query greater than 4
+const posts = await DataStore.query(Post, c => c.rating("gt", 4));
 
-### Making a Progressive Web App
+// query posts equal to "My First Post"
+const posts = await DataStore.query(Post, c => c.title("eq", "My First Post"));
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+// chaining multiple commands
+const posts = await DataStore.query(Post, c => c.rating("gt", 4).status("eq", PostStatus.ACTIVE));
 
-### Advanced Configuration
+// query posts containing "First"
+const posts = await DataStore.query(Post, c => c.title("contains", "First"));
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Updating data
 
-### Deployment
+Models in DataStore are immutable. To update a record you must use the .copyOf function to apply updates to the item’s fields rather than mutating the instance directly:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```js
+const original = await DataStore.query(Post, "123");
 
-### `npm run build` fails to minify
+await DataStore.save(
+	Post.copyOf(original, updated => {
+		updated.status = PostStatus.ACTIVE
+	})
+);
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Delete Data
+
+To delete an item pass in an instance:
+
+```js
+const todelete = await DataStore.query(Post, "1234567");
+DataStore.delete(todelete);
+```
+
+You can also pass predicate operators to delete multiple items. For example will delete all inactive posts:
+
+```js
+await DataStore.delete(Post, c => c.status("eq", PostStatus.INACTIVE));
+```
+
+Additionally you can perform a conditional delete, for instance only delete if a post is inactive by passing in an instance of a model:
+
+```js
+const todelete = await DataStore.query(Post, "123");
+DataStore.delete(todelete, c => c.status("eq", PostStatus.INACTIVE));
+```
+
+### Observe Data
+
+You can subscribe to changes on your Models by using `observe` in the DataStore API. This reacts dynamically to updates of data to the underlying Storage Engine, which could be the result of GraphQL Subscriptions as well as Queries or Mutations that run against the backing AppSync API if you are synchronizing with the cloud.
+
+```js
+const subscription = DataStore.observe(Post).subscribe(msg => {
+  console.log(msg.model, msg.opType, msg.element);
+})
+```

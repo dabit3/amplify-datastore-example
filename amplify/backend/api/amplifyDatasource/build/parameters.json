@@ -1,0 +1,4 @@
+{
+    "S3DeploymentBucket": "fake-bucket",
+    "S3DeploymentRootKey": "amplify-appsync-files/133172cd5b9603f26a1a939c6dbcb542fb8c5438"
+}
