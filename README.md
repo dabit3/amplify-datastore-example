@@ -1,5 +1,7 @@
 ## Basic DataStore Example
 
+### Creating a new Amplify app using DataStore
+
 The fastest way to get started is using the amplify-app npx script such as with Create React app:
 
 ```sh
@@ -201,3 +203,36 @@ function App() {
 
 export default App;
 ```
+
+### Adding DataStore to an existing GraphQL API
+
+First, make sure you are updated to the latest version of the Amplify CLI:
+
+```sh
+$ npm install -g @aws-amplify/cli
+```
+
+Next, generate the models from your GraphQL schema:
+
+```sh
+$ amplify codegen models
+```
+
+Next, update the GraphQL API to add the new conflict detection:
+
+```sh
+$ amplify update api
+? Please select from one of the below mentioned services: GraphQL
+? Choose the default authorization type for the API API key
+? Enter a description for the API key: test
+? After how many days from now the API key should expire (1-365): <your expiration setting>
+? Do you want to configure advanced settings for the GraphQL API (Use arrow keys
+)
+  No, I am done.
+❯ Yes, I want to make some additional changes.
+? Configure additional auth types? N
+? Configure conflict detection? Y
+? Select the default resolution strategy: Auto Merge
+? Do you want to override default per model settings? N
+```
+
