@@ -143,7 +143,7 @@ DataStore.delete(todelete, c => c.status("eq", PostStatus.INACTIVE));
 
 ### Deploying the app
 
-To deploy the app, initialize a new Amplify project:
+To deploy the app, initialize the back end:
 
 ```sh
 $ amplify init
