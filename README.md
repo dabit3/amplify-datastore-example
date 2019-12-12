@@ -141,6 +141,28 @@ const todelete = await DataStore.query(Post, "123");
 DataStore.delete(todelete, c => c.status("eq", PostStatus.INACTIVE));
 ```
 
+### Deploying the app
+
+To deploy the app, initialize a new Amplify project:
+
+```sh
+$ amplify init
+```
+
+Next, deploy the service:
+
+```sh
+$ amplify push
+```
+
+Once the app is deployed and you'd like to interact with the service, you first need to configure the JavaScript app to use the AWS credentials created by the CLI:
+
+```js
+import Amplify from 'aws-amplify'
+import config from './aws-exports'
+Amplify.configure(config)
+```
+
 ### Observe Data
 
 You can subscribe to changes on your Models by using `observe` in the DataStore API. This reacts dynamically to updates of data to the underlying Storage Engine, which could be the result of GraphQL Subscriptions as well as Queries or Mutations that run against the backing AppSync API if you are synchronizing with the cloud.
