@@ -50,6 +50,8 @@ import { DataStore, Predicates } from "@aws-amplify/datastore";
 import { Post, PostStatus } from "./models";
 ```
 
+### At this point the app back end has _not_ been deployed, for now we will be working locally.
+
 Now, let's look at the different types of operations.
 
 ### Saving data
@@ -141,7 +143,7 @@ const todelete = await DataStore.query(Post, "123");
 DataStore.delete(todelete, c => c.status("eq", PostStatus.INACTIVE));
 ```
 
-### Deploying the app
+### Deploying the app back end
 
 To deploy the app, initialize the back end:
 
