@@ -50,7 +50,7 @@ import { DataStore, Predicates } from "@aws-amplify/datastore";
 import { Post, PostStatus } from "./models";
 ```
 
-### At this point the app back end has _not_ been deployed, for now we will be working locally.
+#### At this point the app back end has _not_ been deployed, for now we will be working locally.
 
 Now, let's look at the different types of operations.
 
