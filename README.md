@@ -160,7 +160,7 @@ $ amplify push
 Once the app is deployed and you'd like to interact with the service, you first need to configure the JavaScript app to use the AWS credentials created by the CLI:
 
 ```js
-import Amplify from 'aws-amplify'
+import Amplify from '@aws-amplify/core'
 import config from './aws-exports'
 Amplify.configure(config)
 ```
