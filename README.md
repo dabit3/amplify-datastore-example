@@ -221,11 +221,14 @@ function App() {
         <input
           value={form.title}
           placeholder="title"
+	  required
           onChange={e => updateForm({ ...form, 'title': e.target.value })}
         />
         <input
           value={form.rating}
           placeholder="rating"
+	  required
+	  type="number"
           onChange={e => updateForm({ ...form, 'rating': parseInt(e.target.value) })}
         />
         <button onClick={create}>Create Post</button>
